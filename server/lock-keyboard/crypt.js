@@ -3,7 +3,7 @@ class Random {
         this.val = seed
     }
     next () {
-        this.val = ((this.val * 1103515245) + 12345) % 2147483647
+        this.val = Number(((BigInt(this.val) * 1103515245n) + 12345n) % 2147483647n)
     }
 }
 class StreamCipher {
@@ -38,7 +38,9 @@ class StreamCipher {
     next() {
         for (let i=0; i<4; i++) {
             this.randoms[i].next()
+            console.log(this.randoms[i].val)
             this.keys[i] = this.randoms[i].val % 268435456 // 268425456 = 2^28
+            console.log("keys "+i+": "+this.keys[i]);
         }
         this.key_i = 0 // 0~3
         this.bit_i = 0 // 0~6
@@ -46,8 +48,13 @@ class StreamCipher {
 }
 
 module.exports = { StreamCipher: StreamCipher }
-
 /*
+const key = new StreamCipher([123456, 789012, 345678, 901234]);
+for (let i=0; i<1000; i++) {
+    console.log(key.encrypt(String.fromCharCode(65)).charCodeAt(0))
+}
+*/
+    /*
 const key = new Stream([98611231233123, 213689123123, 123986912312313, 12386968123123124])
 const format = (num, len) => {
     return num.toString(2).padStart(len, 0)
