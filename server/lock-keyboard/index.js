@@ -6,10 +6,11 @@ module.exports = (port, privateKey, publicKey, onconnect, ondata, ondisconnect) 
     const rsa = new NodeRSA(privateKey)
     const io = socketio(port)
     io.sockets.on('connection', (socket) => {
+        console.log('socket.io connected')
         socket.on('handshake', (data) => {
             const [tokenString, tokenSign, seedsSecure] = data
             console.log(tokenString)
-            if (!rsa.verify(tokenString, tokenSign)) {
+            if (!rsa.verify(tokenString, tokenSign, 'utf8', 'base64')) {
                 socket.disconnect()
                 console.log('잘못된 토큰')
                 return
