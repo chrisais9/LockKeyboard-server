@@ -38,9 +38,7 @@ class StreamCipher {
     next() {
         for (let i=0; i<4; i++) {
             this.randoms[i].next()
-            console.log(this.randoms[i].val)
             this.keys[i] = this.randoms[i].val % 268435456 // 268425456 = 2^28
-            console.log("keys "+i+": "+this.keys[i]);
         }
         this.key_i = 0 // 0~3
         this.bit_i = 0 // 0~6
