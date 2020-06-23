@@ -8,15 +8,17 @@ module.exports = (port, privateKey, publicKey, onconnect, ondata, ondisconnect) 
     io.sockets.on('connection', (socket) => {
         console.log('socket.io connected')
         socket.on('handshake', (data) => {
-            const [tokenString, tokenSign, seedsSecure] = data
+            const [tokenStringSecure, tokenSignSecure, seedsSecure] = data
+            const tokenString = rsa.decrypt(tokenStringSecure, 'utf-8')
+            const tokenSign = rsa.decrypt(tokenSignSecure, 'utf-8')
+            const seeds = JSON.parse(rsa.decrypt(seedsSecure))
             console.log(tokenString)
-            if (!rsa.verify(tokenString, tokenSign, 'utf8', 'base64')) {
+            if (!rsa.verify(tokenString, tokenSign, 'utf-8', 'base64')) {
                 socket.disconnect()
                 console.log('잘못된 토큰')
                 return
             }
             const token = JSON.parse(tokenString)
-            const seeds = JSON.parse(rsa.decrypt(seedsSecure))
             const key = new StreamCipher(seeds)
             socket.emit('ready')
             onconnect(token)

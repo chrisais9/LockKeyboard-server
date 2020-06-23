@@ -16,8 +16,10 @@ const socket = io(SERVER)
 
 socket.on('connect', () => {
     console.log('연결됨')
-    const seedsSecure = rsa.encrypt(JSON.stringify(seeds))
-    socket.emit('handshake', [tokenString, tokenSign, seedsSecure])
+    const tokenStringSecure = rsa.encrypt(tokenString, 'base64')
+    const tokenSignSecure = rsa.encrypt(tokenSign, 'base64')
+    const seedsSecure = rsa.encrypt(JSON.stringify(seeds), 'base64')
+    socket.emit('handshake', [tokenStringSecure, tokenSignSecure, seedsSecure])
     socket.on('ready', (data) => {
         console.log('연결 완료')
         process.stdin.on('keypress', (str, key) => {
