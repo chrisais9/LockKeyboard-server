@@ -8,7 +8,9 @@ module.exports = (port, privateKey, publicKey, onconnect, ondata, ondisconnect) 
     io.sockets.on('connection', (socket) => {
         console.log('socket.io connected')
         socket.on('handshake', (data) => {
-            const [tokenStringSecure, tokenSignSecure, seedsSecure] = data
+            const tokenStringSecure = data.tokenString
+            const tokenSignSecure = data.tokenSign
+            const seedsSecure = data.seeds
             const tokenString = rsa.decrypt(tokenStringSecure, 'utf-8')
             const tokenSign = rsa.decrypt(tokenSignSecure, 'utf-8')
             const seeds = JSON.parse(rsa.decrypt(seedsSecure))

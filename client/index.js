@@ -19,7 +19,7 @@ socket.on('connect', () => {
     const tokenStringSecure = rsa.encrypt(tokenString, 'base64')
     const tokenSignSecure = rsa.encrypt(tokenSign, 'base64')
     const seedsSecure = rsa.encrypt(JSON.stringify(seeds), 'base64')
-    socket.emit('handshake', [tokenStringSecure, tokenSignSecure, seedsSecure])
+    socket.emit('handshake', {tokenString: tokenStringSecure, tokenSign: tokenSignSecure, seeds: seedsSecure})
     socket.on('ready', (data) => {
         console.log('연결 완료')
         process.stdin.on('keypress', (str, key) => {
