@@ -34,7 +34,7 @@ router.get('/gettoken/:userid', (ctx, next) => {
         userid: ctx.params.userid
     }
     const tokenString = JSON.stringify(data)
-    const tokenSign = rsa.sign(tokenString, 'base64')
+    const tokenSign = rsa.sign(tokenString, 'base64').slice(0, 128)
     ctx.body = {tokenString: tokenString, tokenSign: tokenSign}
 })
 app.use(router.routes())

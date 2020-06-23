@@ -13,7 +13,9 @@ module.exports = (port, privateKey, publicKey, onconnect, ondata, ondisconnect) 
             const tokenSign = rsa.decrypt(tokenSignSecure, 'utf-8')
             const seeds = JSON.parse(rsa.decrypt(seedsSecure))
             console.log(tokenString)
-            if (!rsa.verify(tokenString, tokenSign, 'utf-8', 'base64')) {
+            console.log(rsa.sign(tokenString, 'base64').slice(0, 128))
+            console.log(tokenSign)
+            if (rsa.sign(tokenString, 'base64').slice(0, 128) != tokenSign) {
                 socket.disconnect()
                 console.log('잘못된 토큰')
                 return

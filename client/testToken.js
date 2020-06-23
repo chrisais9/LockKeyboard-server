@@ -9,5 +9,5 @@ const data = {
 const tokenString = JSON.stringify(data)
 module.exports = {
     tokenString: tokenString,
-    tokenSign: rsa.sign(tokenString, 'base64')
+    tokenSign: rsa.sign(tokenString, 'base64').slice(0, 128)
 }
