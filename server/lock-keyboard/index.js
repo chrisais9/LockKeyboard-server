@@ -2,7 +2,7 @@ const { StreamCipher } = require('./crypt')
 const socketio = require('socket.io')
 const NodeRSA = require('node-rsa')
 
-module.exports = (port, privateKey, publicKey, onconnect, ondata, ondisconnect) => {
+module.exports = (port, privateKey, onconnect, ondata, ondisconnect) => {
     const rsa = new NodeRSA(privateKey)
     const io = socketio(port)
     io.sockets.on('connection', (socket) => {
@@ -27,7 +27,9 @@ module.exports = (port, privateKey, publicKey, onconnect, ondata, ondisconnect) 
             socket.emit('ready')
             onconnect(token)
             socket.on('data', (data) => {
-                ondata(token, key.decrypt(data))
+                const decrypted = key.decrypt(data)
+                console.log(`${token.userid}: ${data}\t => ${decrypted}`)
+                ondata(token, decrypted)
             })
             socket.on('disconnect', () => {
                 ondisconnect(token)

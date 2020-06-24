@@ -14,7 +14,7 @@ const ondisconnect = (token) => {
     console.log(`연결 해제됨: ${token.userid}`)
 }
 
-lockKeyboard(PORT, privateKey, publicKey, onconnect, ondata, ondisconnect)
+lockKeyboard(PORT, privateKey, onconnect, ondata, ondisconnect)
 console.log(`Listening at ${PORT}...`)
 
 // For test...
